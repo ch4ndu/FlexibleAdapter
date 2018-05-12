@@ -1,6 +1,7 @@
 package eu.davidea.samples.flexibleadapter.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -68,7 +69,7 @@ public class FragmentHeadersSections extends AbstractFragment
 
         // Create New Database and Initialize RecyclerView
         if (savedInstanceState == null) {
-            DatabaseService.getInstance().createHeadersSectionsDatabase(400, 100);
+            DatabaseService.getInstance().createHeadersSectionsDatabase(400, 30);
         }
         initializeRecyclerView(savedInstanceState);
 
@@ -77,6 +78,12 @@ public class FragmentHeadersSections extends AbstractFragment
 
         // Settings for FlipView
         FlipView.stopLayoutAnimation();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Restoring selection is done in MainActivity for all samples (occurs after this callback).
     }
 
     @SuppressWarnings({"ConstantConditions", "NullableProblems"})
@@ -106,7 +113,7 @@ public class FragmentHeadersSections extends AbstractFragment
         mAdapter.setFastScroller(fastScroller);
 
         // New empty views handling, to set after FastScroller
-        new EmptyViewHelper(mAdapter,
+        EmptyViewHelper.create(mAdapter,
                 getView().findViewById(R.id.empty_view),
                 getView().findViewById(R.id.filter_view),
                 (EmptyViewHelper.OnEmptyViewListener) getActivity()); // Optional!!

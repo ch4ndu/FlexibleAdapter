@@ -30,7 +30,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
  * @author Davide Steduto
  * @since 20/01/2016 Created
  * <br>21/04/2017 ViewHolders methods are now abstract
- * <br>08/12/2017 new callback methods when view is attached/detached/recycled
+ * <br>08/12/2017 New callback methods when view is attached/detached/recycled
+ * <br>22/04/2018 Item is born with draggable and swipeable enabled
  */
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractFlexibleItem<VH extends RecyclerView.ViewHolder>
@@ -38,7 +39,7 @@ public abstract class AbstractFlexibleItem<VH extends RecyclerView.ViewHolder>
 
     /* Item flags recognized by the FlexibleAdapter */
     protected boolean mEnabled = true, mHidden = false,
-            mSelectable = true, mDraggable = false, mSwipeable = false;
+            mSelectable = true, mDraggable = true, mSwipeable = true;
 
 	/*---------------*/
     /* BASIC METHODS */
@@ -162,33 +163,33 @@ public abstract class AbstractFlexibleItem<VH extends RecyclerView.ViewHolder>
      * {@inheritDoc}
      */
     @Override
-    public abstract VH createViewHolder(View view, FlexibleAdapter adapter);
+    public abstract VH createViewHolder(View view, FlexibleAdapter<IFlexible> adapter);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public abstract void bindViewHolder(FlexibleAdapter adapter, VH holder, int position, List<Object> payloads);
+    public abstract void bindViewHolder(FlexibleAdapter<IFlexible> adapter, VH holder, int position, List<Object> payloads);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void unbindViewHolder(FlexibleAdapter adapter, VH holder, int position) {
+    public void unbindViewHolder(FlexibleAdapter<IFlexible> adapter, VH holder, int position) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onViewAttached(FlexibleAdapter adapter, VH holder, int position) {
+    public void onViewAttached(FlexibleAdapter<IFlexible> adapter, VH holder, int position) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onViewDetached(FlexibleAdapter adapter, VH holder, int position) {
+    public void onViewDetached(FlexibleAdapter<IFlexible> adapter, VH holder, int position) {
     }
 
 }

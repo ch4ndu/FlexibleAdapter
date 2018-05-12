@@ -4,7 +4,6 @@ apply plugin: 'eu.davidea.grabver'
 versioning {
     major 5
     minor 0
-    preRelease "rc4"
 }
 
 android {
@@ -67,7 +66,7 @@ dependencies {
     implementation project(':flexible-adapter-databinding')
 
     // Support Libraries
-    implementation supportLib.appcompat
+    implementation supportLib.appCompat
     implementation supportLib.cardView
     implementation supportLib.design
     implementation supportLib.recyclerView
@@ -100,6 +99,6 @@ dependencies {
     })
     testImplementation 'org.robolectric:robolectric:3.4.2'
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'org.mockito:mockito-core:2.15.0'
 
 }

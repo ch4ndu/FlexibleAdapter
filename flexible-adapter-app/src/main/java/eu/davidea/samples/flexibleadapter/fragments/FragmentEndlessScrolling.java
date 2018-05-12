@@ -28,6 +28,7 @@ import eu.davidea.samples.flexibleadapter.MainActivity;
 import eu.davidea.samples.flexibleadapter.R;
 import eu.davidea.samples.flexibleadapter.animators.FadeInDownItemAnimator;
 import eu.davidea.samples.flexibleadapter.items.ProgressItem;
+import eu.davidea.samples.flexibleadapter.items.ScrollableLayoutItem;
 import eu.davidea.samples.flexibleadapter.services.DatabaseConfiguration;
 import eu.davidea.samples.flexibleadapter.services.DatabaseService;
 
@@ -68,7 +69,7 @@ public class FragmentEndlessScrolling extends AbstractFragment
 
         // Create New Database and Initialize RecyclerView
         if (savedInstanceState == null) {
-            DatabaseService.getInstance().createEndlessDatabase(0); //N. of items
+            DatabaseService.getInstance().createHeadersSectionsDatabase(0, 0); //N. of items
         }
         initializeRecyclerView(savedInstanceState);
 
@@ -85,7 +86,6 @@ public class FragmentEndlessScrolling extends AbstractFragment
         mFab.setImageResource(R.drawable.ic_refresh_white_24dp);
     }
 
-    @SuppressWarnings({"ConstantConditions", "NullableProblems"})
     private void initializeRecyclerView(Bundle savedInstanceState) {
         // Initialize Adapter and RecyclerView
         // ExampleAdapter makes use of stableIds, I strongly suggest to implement 'item.hashCode()'
@@ -115,7 +115,7 @@ public class FragmentEndlessScrolling extends AbstractFragment
         mAdapter.setFastScroller(fastScroller);
 
         // New empty views handling, to set after FastScroller
-        new EmptyViewHelper(mAdapter,
+        EmptyViewHelper.create(mAdapter,
                 getView().findViewById(R.id.empty_view),
                 getView().findViewById(R.id.filter_view));
 
@@ -135,8 +135,11 @@ public class FragmentEndlessScrolling extends AbstractFragment
                 .setEndlessScrollListener(this, mProgressItem)
                 .setTopEndless(false);
 
-        // Add 1 Footer items
-        //mAdapter.addScrollableFooter();
+        // Add 1 Header item
+        ScrollableLayoutItem scrollHeader = new ScrollableLayoutItem("SLI");
+        scrollHeader.setTitle("Endless Scrolling");
+        scrollHeader.setSubtitle("...with ScrollableHeaderItem");
+        mAdapter.addScrollableHeader(scrollHeader);
     }
 
     @Override
@@ -180,7 +183,7 @@ public class FragmentEndlessScrolling extends AbstractFragment
         // We don't want load more items when searching into the current Collection!
         // Alternatively, for a special filter, if we want load more items when filter is active, the
         // new items that arrive from remote, should be already filtered, before adding them to the Adapter!
-        if (mAdapter.hasSearchText()) {
+        if (mAdapter.hasFilter()) {
             mAdapter.onLoadMoreComplete(null);
             return;
         }
@@ -207,7 +210,7 @@ public class FragmentEndlessScrolling extends AbstractFragment
                 } else {
                     DatabaseService.getInstance().addAll(newItems);
                 }
-                mAdapter.onLoadMoreComplete(newItems, 3000L);
+                mAdapter.onLoadMoreComplete(newItems, (newItems.isEmpty() ? -1 : 3000L));
                 // - Retrieve the new page number after adding new items!
                 Log.d(TAG, "EndlessCurrentPage=" + mAdapter.getEndlessCurrentPage());
                 Log.d(TAG, "EndlessPageSize=" + mAdapter.getEndlessPageSize());
